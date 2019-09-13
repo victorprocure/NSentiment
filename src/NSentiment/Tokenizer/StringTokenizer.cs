@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 namespace NSentiment.Tokenizer
@@ -8,7 +7,7 @@ namespace NSentiment.Tokenizer
     {
         private readonly StringTokenEnumerator _enumerator;
 
-        public StringTokenizer(string raw) : this(raw, new[] { " ", Environment.NewLine })
+        public StringTokenizer(string raw) : this(raw, Constants.Tokenizer.DefaultDelimiters)
         {
         }
 

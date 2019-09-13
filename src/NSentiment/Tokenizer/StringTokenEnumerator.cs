@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,20 +5,25 @@ namespace NSentiment.Tokenizer
 {
     internal sealed class StringTokenEnumerator : IEnumerator<string>
     {
-        private readonly string[] _delimiters;
+        private readonly HashSet<string> _delimiters;
         private readonly int _length;
         private readonly string _raw;
+
         private int _position;
 
-        public StringTokenEnumerator(string raw) : this(raw, new[] { " ", "\r", "\n" })
+        public StringTokenEnumerator(string raw) : this(raw, Constants.Tokenizer.DefaultDelimiters)
         {
         }
 
-        public StringTokenEnumerator(string raw, params string[] delimiters)
+        public StringTokenEnumerator(string raw, HashSet<string> delimiters)
         {
             _length = raw.Length;
             _raw = raw;
             _delimiters = delimiters;
+        }
+
+        public StringTokenEnumerator(string raw, params string[] delimiters) : this(raw, new HashSet<string>(delimiters))
+        {
         }
 
         public string Current { get; private set; }
@@ -33,12 +37,9 @@ namespace NSentiment.Tokenizer
 
         public bool MoveNext()
         {
-            if (_position < _length && Array.IndexOf(_delimiters, _raw[_position]) >= 0)
+            while (_position < _length && _delimiters.Contains(new string(_raw[_position], 1)))
             {
-                do
-                {
-                    _position++;
-                } while (_position < _length && Array.IndexOf(_delimiters, _raw[_position]) >= 0);
+                _position++;
             }
 
             if (_position < _length)
@@ -47,9 +48,9 @@ namespace NSentiment.Tokenizer
                 do
                 {
                     _position++;
-                } while (_position < _length && Array.IndexOf(_delimiters, _raw[_position]) < 0);
+                } while (_position < _length && !_delimiters.Contains(new string(_raw[_position], 1)));
 
-                Current = _raw.Substring(start, _position);
+                Current = _raw.Substring(start, _position - start);
 
                 return true;
             }
