@@ -13,9 +13,7 @@ namespace NSentiment.Tokenizer
         }
 
         public StringTokenizer(string raw, params string[] delimiters)
-        {
-            _enumerator = new StringTokenEnumerator(raw, delimiters);
-        }
+            => _enumerator = new StringTokenEnumerator(raw, delimiters);
 
         public IEnumerator<string> GetEnumerator() => _enumerator;
 

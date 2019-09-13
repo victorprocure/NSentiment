@@ -6,12 +6,12 @@ namespace NSentiment.Tokenizer
 {
     internal sealed class StringTokenEnumerator : IEnumerator<string>
     {
+        private readonly string[] _delimiters;
         private readonly int _length;
         private readonly string _raw;
-        private readonly string[] _delimiters;
         private int _position;
 
-        public StringTokenEnumerator(string raw) : this(raw, new[] { " ", Environment.NewLine })
+        public StringTokenEnumerator(string raw) : this(raw, new[] { " ", "\r", "\n" })
         {
         }
 
@@ -35,18 +35,19 @@ namespace NSentiment.Tokenizer
         {
             if (_position < _length && Array.IndexOf(_delimiters, _raw[_position]) >= 0)
             {
-                while (_position < _length && Array.IndexOf(_delimiters, _raw[_position]) >= 0)
+                do
                 {
                     _position++;
-                }
+                } while (_position < _length && Array.IndexOf(_delimiters, _raw[_position]) >= 0);
             }
+
             if (_position < _length)
             {
                 var start = _position;
-                while (_position < _length && Array.IndexOf(_delimiters, _raw[_position]) < 0)
+                do
                 {
                     _position++;
-                }
+                } while (_position < _length && Array.IndexOf(_delimiters, _raw[_position]) < 0);
 
                 Current = _raw.Substring(start, _position);
 
