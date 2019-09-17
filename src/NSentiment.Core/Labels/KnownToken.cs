@@ -1,13 +1,15 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 
-namespace NSentiment
+namespace NSentiment.Core.Labels
 {
     [ExcludeFromCodeCoverage]
     public struct KnownToken
     {
-        public KnownToken(string token, int weight)
+        [JsonConstructor]
+        public KnownToken(string label, int weight)
         {
-            Token = token;
+            Token = label;
             Weight = weight;
         }
 
@@ -16,6 +18,7 @@ namespace NSentiment
         }
 
         public string Token { get; }
+
         public int Weight { get; }
     }
 }

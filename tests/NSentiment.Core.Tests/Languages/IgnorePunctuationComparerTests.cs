@@ -1,4 +1,4 @@
-﻿using NSentiment.Comparers;
+﻿using NSentiment.Core.Languages;
 using Xunit;
 
 namespace NSentiment.Tests.Comparers

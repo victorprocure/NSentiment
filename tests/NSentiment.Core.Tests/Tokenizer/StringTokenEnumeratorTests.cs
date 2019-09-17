@@ -1,4 +1,5 @@
-using NSentiment.Tokenizer;
+using System.Threading.Tasks;
+using NSentiment.Core.Tokenizer;
 using Xunit;
 
 namespace NSentiment.Tests.Tokenizer
@@ -6,29 +7,29 @@ namespace NSentiment.Tests.Tokenizer
     public sealed class StringTokenEnumeratorTests
     {
         [Fact]
-        public void GivenSimpleStringShouldTokenize()
+        public async Task GivenSimpleStringShouldTokenize()
         {
-            using var neutralEnumerator = new StringTokenEnumerator(Constants.SimpleStrings.NeutralString.str);
+            var neutralEnumerator = new StringTokenEnumerator(Constants.SimpleStrings.NeutralString.str);
             var tokenCount = 0;
-            while (neutralEnumerator.MoveNext())
+            while (await neutralEnumerator.MoveNextAsync())
             {
                 ++tokenCount;
             }
 
             Assert.Equal(Constants.SimpleStrings.NeutralString.tokenCount, tokenCount);
 
-            using var positiveEnumerator = new StringTokenEnumerator(Constants.SimpleStrings.PositiveString.str);
+            var positiveEnumerator = new StringTokenEnumerator(Constants.SimpleStrings.PositiveString.str);
             tokenCount = 0;
-            while (positiveEnumerator.MoveNext())
+            while (await positiveEnumerator.MoveNextAsync())
             {
                 ++tokenCount;
             }
 
             Assert.Equal(Constants.SimpleStrings.PositiveString.tokenCount, tokenCount);
 
-            using var negativeEnumerator = new StringTokenEnumerator(Constants.SimpleStrings.NegativeString.str);
+            var negativeEnumerator = new StringTokenEnumerator(Constants.SimpleStrings.NegativeString.str);
             tokenCount = 0;
-            while (negativeEnumerator.MoveNext())
+            while (await negativeEnumerator.MoveNextAsync())
             {
                 ++tokenCount;
             }
@@ -37,29 +38,29 @@ namespace NSentiment.Tests.Tokenizer
         }
 
         [Fact]
-        public void GivenComplexStringShouldTokenize()
+        public async Task GivenComplexStringShouldTokenize()
         {
-            using var neutralEnumerator = new StringTokenEnumerator(Constants.MultilineStrings.NeutralString.str);
+            var neutralEnumerator = new StringTokenEnumerator(Constants.MultilineStrings.NeutralString.str);
             var tokenCount = 0;
-            while (neutralEnumerator.MoveNext())
+            while (await neutralEnumerator.MoveNextAsync())
             {
                 ++tokenCount;
             }
 
             Assert.Equal(Constants.MultilineStrings.NeutralString.tokenCount, tokenCount);
 
-            using var positiveEnumerator = new StringTokenEnumerator(Constants.MultilineStrings.PositiveString.str);
+            var positiveEnumerator = new StringTokenEnumerator(Constants.MultilineStrings.PositiveString.str);
             tokenCount = 0;
-            while (positiveEnumerator.MoveNext())
+            while (await positiveEnumerator.MoveNextAsync())
             {
                 ++tokenCount;
             }
 
             Assert.Equal(Constants.MultilineStrings.PositiveString.tokenCount, tokenCount);
 
-            using var negativeEnumerator = new StringTokenEnumerator(Constants.MultilineStrings.NegativeString.str);
+            var negativeEnumerator = new StringTokenEnumerator(Constants.MultilineStrings.NegativeString.str);
             tokenCount = 0;
-            while (negativeEnumerator.MoveNext())
+            while (await negativeEnumerator.MoveNextAsync())
             {
                 ++tokenCount;
             }

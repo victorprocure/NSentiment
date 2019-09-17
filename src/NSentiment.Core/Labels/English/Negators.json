@@ -1,0 +1,32 @@
+{
+  "labels": [
+    {
+      "label": "cant",
+      "weight": 1
+    },
+    {
+      "label": "dont",
+      "weight": 1
+    },
+    {
+      "label": "doesnt",
+      "weight": 1
+    },
+    {
+      "label": "not",
+      "weight": 1
+    },
+    {
+      "label": "non",
+      "weight": 1
+    },
+    {
+      "label": "wont",
+      "weight": 1
+    },
+    {
+      "label": "isnt",
+      "weight": 1
+    }
+  ]
+}

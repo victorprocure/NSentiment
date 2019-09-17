@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NSentiment.Comparers
+namespace NSentiment.Core.Labels
 {
-    internal sealed class KnownTokenComparer : IEqualityComparer<KnownToken>
+    public sealed class KnownTokenComparer : IEqualityComparer<KnownToken>
     {
         public bool Equals(KnownToken x, KnownToken y)
             => string.Equals(RemovePunctuation(x), RemovePunctuation(y), StringComparison.OrdinalIgnoreCase);

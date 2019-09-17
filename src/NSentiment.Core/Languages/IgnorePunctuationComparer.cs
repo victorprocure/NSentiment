@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NSentiment.Comparers
+namespace NSentiment.Core.Languages
 {
-    internal sealed class IgnorePunctuationComparer : IEqualityComparer<string>
+    public sealed class IgnorePunctuationComparer : IEqualityComparer<string>
     {
         public bool Equals(string x, string y)
             => string.Equals(RemovePunctuation(x), RemovePunctuation(y), StringComparison.OrdinalIgnoreCase);

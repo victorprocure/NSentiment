@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using NSentiment.Core.Labels;
 
-namespace NSentiment
+namespace NSentiment.Core.Languages
 {
     public interface ILanguage
     {

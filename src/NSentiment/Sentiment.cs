@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NSentiment.Comparers;
+using System.Threading.Tasks;
 using NSentiment.Configuration;
-using NSentiment.Languages;
-using NSentiment.Languages.Default;
+using NSentiment.Core.Languages;
+using NSentiment.Core.Languages.English;
 
 namespace NSentiment
 {
-    public sealed class Sentiment
+    public sealed class Sentiment : IDisposable
     {
+        private readonly static DefaultConfiguration _defaultConfiguration = new DefaultConfiguration();
         private readonly IDictionary<string, ILanguage> _languages = new Dictionary<string, ILanguage>(new IgnorePunctuationComparer());
         private readonly SentimentConfiguration _configuration;
         private readonly ILanguageProcessor _languageProcessor;
-
         private readonly object _locker = new object();
 
         public Sentiment(SentimentConfiguration configuration, ILanguageProcessor languageProcessor)
@@ -24,30 +24,30 @@ namespace NSentiment
             AddLanguage(configuration.DefaultLanguage);
         }
 
-        public Sentiment(SentimentConfiguration configuration) : this(configuration, new DefaultLanguageProcessor())
+        public Sentiment(SentimentConfiguration configuration) : this(configuration, new LanguageProcessor())
         {
         }
 
-        public Sentiment(ILanguageProcessor languageProcessor) : this(new DefaultConfiguration(), languageProcessor)
+        public Sentiment(ILanguageProcessor languageProcessor) : this(_defaultConfiguration, languageProcessor)
         {
         }
 
-        public Sentiment() : this(new DefaultConfiguration())
+        public Sentiment() : this(_defaultConfiguration)
         {
         }
 
-        public Analysis Analyze(string raw)
-            => Analyze(raw, _configuration.DefaultLanguage.LanguageCode);
+        public Task<Analysis> AnalyzeAsync(string raw)
+            => AnalyzeAsync(raw, _configuration.DefaultLanguage.LanguageCode);
 
-        public Analysis Analyze(string raw, string languageCode)
+        public async Task<Analysis> AnalyzeAsync(string raw, string languageCode)
         {
             if (string.IsNullOrEmpty(raw))
                 return Analysis.Default;
 
             if (!_languages.TryGetValue(languageCode, out var language))
-                return Analyze(raw);
+                return await AnalyzeAsync(raw).ConfigureAwait(false);
 
-            var processedLanguage = _languageProcessor.ProcessLanguage(raw, language);
+            var processedLanguage = await _languageProcessor.ProcessLanguageAsync(raw, language).ConfigureAwait(false);
             var tokenScore = processedLanguage.Tokens.Sum(t => t.Weight);
             decimal comparitiveScore = processedLanguage.Tokens.Any() ? (tokenScore / (decimal)processedLanguage.Tokens.Count()) : (decimal)0.000;
 
@@ -80,5 +80,7 @@ namespace NSentiment
                 return true;
             }
         }
+
+        public void Dispose() => _defaultConfiguration.Dispose();
     }
 }

@@ -1,37 +1,35 @@
-﻿using Xunit;
+﻿using System.Threading.Tasks;
+using Xunit;
 
 namespace NSentiment.Tests
 {
     public sealed class SentimentTests
     {
         [Fact]
-        public void GivenNeutralStringShouldGiveZeroScore()
+        public async Task GivenNeutralStringShouldGiveZeroScore()
         {
-            var sentiment = new Sentiment();
-
-            var analysis = sentiment.Analyze(Constants.SimpleStrings.NeutralString.str);
+            using var sentiment = new Sentiment();
+            var analysis = await sentiment.AnalyzeAsync(Constants.SimpleStrings.NeutralString.str).ConfigureAwait(false);
 
             Assert.True(analysis.Score == 0);
             Assert.True(analysis.ComparitiveScore == 0);
         }
 
         [Fact]
-        public void GivenPositiveStringShouldGivePositiveScore()
+        public async Task GivenPositiveStringShouldGivePositiveScore()
         {
-            var sentiment = new Sentiment();
-
-            var analysis = sentiment.Analyze(Constants.SimpleStrings.PositiveString.str);
+            using var sentiment = new Sentiment();
+            var analysis = await sentiment.AnalyzeAsync(Constants.SimpleStrings.PositiveString.str).ConfigureAwait(false);
 
             Assert.True(analysis.Score > 0);
             Assert.True(analysis.ComparitiveScore > 0);
         }
 
         [Fact]
-        public void GivenNegativeStringShouldGiveNegativeScore()
+        public async Task GivenNegativeStringShouldGiveNegativeScore()
         {
-            var sentiment = new Sentiment();
-
-            var analysis = sentiment.Analyze(Constants.SimpleStrings.NegativeString.str);
+            using var sentiment = new Sentiment();
+            var analysis = await sentiment.AnalyzeAsync(Constants.SimpleStrings.NegativeString.str).ConfigureAwait(false);
 
             Assert.True(analysis.Score < 0);
             Assert.True(analysis.ComparitiveScore < 0);

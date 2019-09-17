@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using NSentiment.Core.Labels;
 
-namespace NSentiment.Languages
+namespace NSentiment.Core.Languages
 {
     [ExcludeFromCodeCoverage]
     public sealed class ProcessedTokens

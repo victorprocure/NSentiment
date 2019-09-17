@@ -1,9 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace NSentiment.Tokenizer
+namespace NSentiment.Core.Tokenizer
 {
-    internal sealed class StringTokenEnumerator : IEnumerator<string>
+    internal sealed class StringTokenEnumerator : IAsyncEnumerator<string>
     {
         private readonly HashSet<string> _delimiters;
         private readonly int _length;
@@ -28,14 +28,16 @@ namespace NSentiment.Tokenizer
 
         public string Current { get; private set; }
 
-        object IEnumerator.Current => Current;
-
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
-            // nothing to dipose
+            await Task.CompletedTask.ConfigureAwait(false);
         }
 
-        public bool MoveNext()
+        public async ValueTask<bool> MoveNextAsync() => await Task.Run(MoveNext).ConfigureAwait(false);
+
+        public void Reset() => _position = 0;
+
+        private bool MoveNext()
         {
             while (_position < _length && _delimiters.Contains(new string(_raw[_position], 1)))
             {
@@ -50,14 +52,12 @@ namespace NSentiment.Tokenizer
                     _position++;
                 } while (_position < _length && !_delimiters.Contains(new string(_raw[_position], 1)));
 
-                Current = _raw.Substring(start, _position - start);
+                Current = _raw[start.._position];
 
                 return true;
             }
 
             return false;
         }
-
-        public void Reset() => _position = 0;
     }
 }
